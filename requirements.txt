@@ -1,0 +1,13 @@
+streamlit
+python-dotenv
+langchain
+langchain-google-genai
+langchain-community
+langgraph
+langgraph-prebuilt
+chromadb
+langchain-chroma
+pypdf
+python-docx
+duckduckgo-search
+ddgs

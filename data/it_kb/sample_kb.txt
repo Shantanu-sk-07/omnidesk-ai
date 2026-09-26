@@ -1,0 +1,74 @@
+=== VPN CONNECTION ISSUES ===
+Problem: VPN won't connect or keeps disconnecting.
+Solutions:
+1. Check internet connection first - open any website.
+2. Restart the VPN client (close completely, reopen).
+3. Clear VPN cache: Settings > Apps > VPN > Clear Cache.
+4. Reinstall the VPN client if issue persists.
+5. Try a different VPN server location.
+6. Check firewall settings - VPN port 1194 must be open.
+7. If on corporate network, contact IT for certificate renewal.
+Escalation: If none work, create a ticket with logs attached.
+
+=== PASSWORD RESET ===
+Problem: User forgot password or account locked.
+Solutions:
+1. Go to https://password.company.com
+2. Click "Forgot Password".
+3. Enter employee email.
+4. Check email for reset link (valid 15 min).
+5. Set new password: min 12 chars, 1 upper, 1 number, 1 symbol.
+6. If account is locked, wait 30 minutes OR contact IT.
+Escalation: If reset link not received, check spam folder; else create ticket.
+
+=== WIFI NOT WORKING ===
+Problem: Cannot connect to office WiFi.
+Solutions:
+1. Ensure WiFi is enabled on device.
+2. Forget network and reconnect.
+3. Check if other devices work - isolate issue.
+4. Restart router (if home network).
+5. For office: ensure device is registered in MAC whitelist.
+6. Update WiFi driver on laptop.
+Escalation: Contact network team with device MAC address.
+
+=== LAPTOP SLOW ===
+Problem: Laptop running slow.
+Solutions:
+1. Restart the laptop.
+2. Check Task Manager > CPU/Memory usage.
+3. Close unused browser tabs and apps.
+4. Run Disk Cleanup (Windows: cleanmgr).
+5. Uninstall unused programs.
+6. Check for Windows updates.
+7. If disk usage is 100% constantly, run antivirus scan.
+Escalation: If hardware is >5 years old, request replacement.
+
+=== EMAIL NOT SYNCING ===
+Problem: Outlook/email not receiving new messages.
+Solutions:
+1. Check internet connection.
+2. Restart Outlook.
+3. Check mailbox quota - delete old emails if full.
+4. Re-add the account if sync fails.
+5. Ensure 2FA is not blocking access.
+Escalation: Contact mail admin with account ID.
+
+=== SOFTWARE INSTALLATION REQUEST ===
+Problem: User needs software installed.
+Solutions:
+1. Check if software is in Company Self-Service Portal.
+2. If yes, install via portal (no admin needed).
+3. If no, submit request at https://it-requests.company.com
+4. Include: software name, version, business justification.
+Escalation: Manager approval required for paid software.
+
+=== PRINTER NOT WORKING ===
+Problem: Cannot print to office printer.
+Solutions:
+1. Check printer is powered on and has paper.
+2. Ensure same network as printer.
+3. Remove and re-add the printer.
+4. Clear print queue (spooler restart).
+5. Update printer drivers.
+Escalation: If hardware issue, log ticket with printer ID.
