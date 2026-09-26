@@ -153,11 +153,9 @@ st.markdown(f"""
     }}
     .stCaption, small {{ color: {T['text_muted']} !important; }}
 
-    /* Hide only the main menu and footer, NOT the header */
     #MainMenu {{ visibility: hidden !important; }}
     footer {{ visibility: hidden !important; }}
 
-    /* Make header transparent but keep sidebar toggle visible */
     header[data-testid="stHeader"] {{
         background: transparent !important;
     }}
@@ -331,6 +329,35 @@ st.markdown(f"""
         30% {{ opacity: 1; }}
     }}
 
+    /* ---------- TOP BAR RADIO (single row) ---------- */
+    div[data-testid="stRadio"] > div[role="radiogroup"] {{
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+        align-items: center !important;
+    }}
+    div[data-testid="stRadio"] > div[role="radiogroup"] > label {{
+        flex: 0 0 auto !important;
+        background: {T['surface']} !important;
+        border: 1px solid {T['border']} !important;
+        border-radius: 20px !important;
+        padding: 7px 18px !important;
+        font-weight: 600 !important;
+        font-size: 0.85rem !important;
+        white-space: nowrap !important;
+        cursor: pointer !important;
+        color: {T['text']} !important;
+    }}
+    div[data-testid="stRadio"] > div[role="radiogroup"] > label:has(input:checked) {{
+        background: {T['accent_soft']} !important;
+        border-color: {T['accent']} !important;
+        color: {T['accent_soft_text']} !important;
+    }}
+    div[data-testid="stRadio"] > div[role="radiogroup"] > label > div:first-child {{
+        display: none !important;
+    }}
+
     /* ---------- CHAT INPUT ---------- */
     [data-testid="stBottom"] {{ background: {T['bg']} !important; }}
     [data-testid="stBottomBlockContainer"] {{
@@ -446,6 +473,12 @@ st.markdown(f"""
         .route-badge, .tool-badge {{ font-size: 0.62rem; padding: 2px 8px; }}
         .candidate-name {{ font-size: 0.92rem; }}
         .candidate-text {{ font-size: 0.85rem; }}
+        /* Topbar pills compact on mobile */
+        div[data-testid="stRadio"] > div[role="radiogroup"] > label {{
+            padding: 6px 14px !important;
+            font-size: 0.78rem !important;
+            border-radius: 18px !important;
+        }}
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -472,6 +505,7 @@ with st.sidebar:
         st.session_state.view = "chat"
         st.rerun()
 
+    # Auto-clean empty non-active chats
     empty_to_delete = [
         cid for cid, chat in st.session_state.chats.items()
         if not chat["messages"] and cid != st.session_state.active_chat_id
@@ -544,39 +578,27 @@ with st.sidebar:
     show_tools = st.checkbox("Show tool usage", value=True)
 
 
-# ============ TOP BAR ============
-col_chat, col_hr, col_theme, col_spacer = st.columns([1, 1, 1, 6])
+# ============ TOP BAR — single row radio ============
+current_index = 0
+if st.session_state.view == "hr":
+    current_index = 1
 
-with col_chat:
-    if st.button(
-        ":material/chat:  Chat",
-        key="view_chat",
-        use_container_width=True,
-        type="primary" if st.session_state.view == "chat" else "secondary",
-    ):
-        st.session_state.view = "chat"
-        st.rerun()
+topbar_choice = st.radio(
+    "Topbar",
+    options=["Chat", "HR", "Theme"],
+    index=current_index,
+    horizontal=True,
+    label_visibility="collapsed",
+    key=f"topbar_radio_{st.session_state.theme_mode}",
+)
 
-with col_hr:
-    if st.button(
-        ":material/group:  HR",
-        key="view_hr",
-        use_container_width=True,
-        type="primary" if st.session_state.view == "hr" else "secondary",
-    ):
-        st.session_state.view = "hr"
-        st.rerun()
-
-with col_theme:
-    theme_icon = ":material/light_mode:" if is_dark else ":material/dark_mode:"
-    theme_help = "Switch to light mode" if is_dark else "Switch to dark mode"
-    if st.button(
-        theme_icon,
-        key=f"theme_toggle_{st.session_state.theme_mode}",
-        help=theme_help,
-        use_container_width=True,
-    ):
-        st.session_state.theme_mode = "light" if is_dark else "dark"
+if topbar_choice == "Theme":
+    st.session_state.theme_mode = "light" if is_dark else "dark"
+    st.rerun()
+else:
+    new_view = topbar_choice.lower()
+    if st.session_state.view != new_view:
+        st.session_state.view = new_view
         st.rerun()
 
 st.markdown("---")
@@ -653,6 +675,7 @@ else:
     )
     st.markdown("---")
 
+    # ---------- Screen & Rank ----------
     if hr_mode == "Screen & Rank":
         st.markdown("#### Screen & Rank Candidates")
         jd_text = st.text_area(
@@ -728,6 +751,7 @@ else:
 </div>
 """, unsafe_allow_html=True)
 
+    # ---------- Analyze Resume ----------
     elif hr_mode == "Analyze Resume":
         st.markdown("#### Deep Resume Analysis")
         col1, col2 = st.columns(2, gap="large")
@@ -776,6 +800,7 @@ else:
                     except Exception as e:
                         st.error(f"Analysis failed: {e}")
 
+    # ---------- Resume Q&A ----------
     else:
         st.markdown("#### Ask Questions About a Resume")
         qa_input_mode = st.radio(
